@@ -1,0 +1,11 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Gnome DE
+  package:
+    name:
+      - ubuntu-desktop
+      - virtualbox-guest-additions-iso
+    state: present

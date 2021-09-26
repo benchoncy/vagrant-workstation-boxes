@@ -1,0 +1,9 @@
+---
+- name: Install Gnome DE
+  package:
+    name:
+      - '@gnome-desktop'
+    state: present
+
+- name: Set default graphic target
+  ansible.builtin.command: systemctl set-default graphical.target
