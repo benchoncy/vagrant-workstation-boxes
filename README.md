@@ -22,11 +22,13 @@ Ensure all required prerequisites are installed, then a build can be run using:
 ansible-playbook build-boxes.yml
 ```
 
+To build requires a vagrant cloud token, this can be specified through the environnement variable `VAGRANT_CLOUD_TOKEN` or passed through the `--extra-vars` flag, see section on [variables](#Variables) for more.
+
 ### Tags
 
 The ansible playbook is tagged to help with controlling the flow of execution. available tags are listed below.
 
-Example:
+_Example:_
 ```shell
 ansible-playbook build-boxes.yml --tags "version_check"
 ```
@@ -39,7 +41,12 @@ ansible-playbook build-boxes.yml --tags "version_check"
 
 ### Variables
 
-To build requires a vagrant cloud token, this can be specified through the environnement variable `VAGRANT_CLOUD_TOKEN` or passed through the `--extra-vars` flag
+Below is a list of variables which can be passed to ansible through the `--extra-vars` flag.
+
+_Example:_
+```shell
+ansible-playbook build-boxes.yml --extra-vars "next_version_type=patch"
+```
 
 | Variable | Note |
 | ----------- | ----------- |
