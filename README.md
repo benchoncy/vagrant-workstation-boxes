@@ -60,6 +60,8 @@ packer build -force -only='*<TARGET_BOX>' -except='vagrant-cloud' box-config.pkr
 
 Once packer is complete, you can navigate to `box-files/<TARGET_BOX>/` and run `vagrant up` to run the local box in vagrant.
 
+> **_NOTE:_**  Vagrant will boot the virtualbox vm with 4 cores and 8gb of RAM, if you do not have this available edit the Vagrantfile accordingly. 
+
 #### Packer variables
 
 The follwing variables can be passed to `packer build` using the `-var` flag:
