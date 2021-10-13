@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    next_version_type: minor
+    boxes:
+      - ubuntu-2004
+      - fedora-34
+  
+  tasks:
+    - name: Init an empty dict for box versions
+      set_fact:
+        box_versions: {}
+      tags: [never, version_check, debug]
+
+    - name: Making boxes
+      include_tasks: "tasks/build-box.yml"
+      loop: "{{ boxes }}"
+      loop_control:
+        loop_var: box_name
+      tags: [always]
+    
+    - name: Check new versions
+      debug:
+        var: box_versions
+      tags: [never, version_check, debug]
+    
+    - name: Clean up output
+      file:
+        path: output/
+        state: absent
+      tags: [always, clean]

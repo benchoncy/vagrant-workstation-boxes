@@ -1,6 +1,5 @@
 .vagrant
 *.box
-Vagrantfile
-output-*/
+output*/
 *.log
 .vscode

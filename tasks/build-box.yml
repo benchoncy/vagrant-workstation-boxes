@@ -1,0 +1,37 @@
+---
+- name: Get current box version from Vagrant Cloud
+  uri:
+    url: https://app.vagrantup.com/api/v1/box/benchoncy/{{ box_name }}-desktop-workstation
+    return_content: true
+  register: box_info
+  tags: [always]
+
+- name: Set the current version
+  set_fact:
+    current_box_version: "{{ (box_info.content | from_json).current_version.version | default('0.0.0') }}"
+  tags: [always]
+
+- name: Set the following version
+  set_fact:
+    next_major_version: "{{ current_box_version.split('.')[0] | int + 1 }}.0.0"
+    next_minor_version: "{{ current_box_version.split('.')[0] }}.{{ current_box_version.split('.')[1] | int + 1 }}.0"
+    next_patch_version: "{{ current_box_version.split('.')[0] }}.{{ current_box_version.split('.')[1] }}.{{ current_box_version.split('.')[2] | int + 1 }}"
+  tags: [always]
+
+- name: "Set next version to {{ next_version_type }}"
+  set_fact:
+    next_version: "{{ lookup('vars', 'next_' + next_version_type + '_version') }}"
+  tags: [always]
+
+- name: Record box version
+  set_fact:
+    box_versions: "{{ box_versions | combine({ box_name: next_version }) }}"
+  tags: [never, version_check, debug]
+
+- name: Run Packer build
+  command:
+    cmd: packer build -only '*{{ box_name }}' -var='version={{ next_version }}' -var='cloud_token={{ vagrant_cloud_token | default(none) }}' -var='org={{ org | default(none) }}' box-config.pkr.hcl
+    creates: "output/output-{{ box_name }}"
+  async: 2100
+  poll: 15
+  tags: [build]

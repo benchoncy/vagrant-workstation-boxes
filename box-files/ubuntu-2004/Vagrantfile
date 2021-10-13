@@ -1,0 +1,14 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "ubuntu2004" do |config|
+    config.vm.box = "ubuntu-2004-desktop-workstation"
+    config.vm.box_url  = "file://../../output/output-ubuntu-2004/package.box"
+    config.vm.provider "virtualbox" do |v|
+      v.gui = true
+      v.check_guest_additions = false
+      v.cpus = 4
+      v.memory = 8192
+      v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+      v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    end
+  end
+end

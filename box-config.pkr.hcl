@@ -1,5 +1,6 @@
 variable "version" {
   type = string
+  default = ""
 }
 
 variable "cloud_token" {
@@ -12,33 +13,37 @@ variable "org" {
   default = "benchoncy"
 }
 
-source "vagrant" "ubuntu-focal64" {
+source "vagrant" "ubuntu-2004" {
   communicator = "ssh"
-  provider = "virtualbox"
   source_path = "ubuntu/focal64"
+  provider = "virtualbox"
   add_force = true
+  add_clean = true
+  output_dir = "output/output-ubuntu-2004"
 }
 
 source "vagrant" "fedora-34" {
   communicator = "ssh"
-  provider = "virtualbox"
   source_path = "generic/fedora34"
+  provider = "virtualbox"
   add_force = true
+  add_clean = true
+  output_dir = "output/output-fedora-34"
 }
 
 build {
   sources = [
-    "source.vagrant.ubuntu-focal64",
-    "source.vagrant.fedora-34"
+    "sources.vagrant.ubuntu-2004",
+    "sources.vagrant.fedora-34"
   ]
 
   provisioner "ansible" {
-    playbook_file = "./playbook.yml"
+    playbook_file = "./box-files/${source.name}/playbook.yml"
   }
 
   post-processor "vagrant-cloud" {
     access_token = "${var.cloud_token}"
-    box_tag      = "${var.org}/${source.name}-desktop-workstation"
-    version      = "${var.version}"
+    box_tag = "${var.org}/${source.name}-desktop-workstation"
+    version = "${var.version}"
   }
 }
