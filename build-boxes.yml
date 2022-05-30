@@ -7,6 +7,7 @@
     boxes:
       - ubuntu-2004
       - fedora-34
+      - fedora-35
   
   tasks:
     - name: Init an empty dict for box versions
@@ -28,6 +29,7 @@
     
     - name: Clean up output
       file:
-        path: output/
+        path: "box-files/{{ item }}/output/"
         state: absent
+      loop: "{{ boxes }}"
       tags: [always, clean]

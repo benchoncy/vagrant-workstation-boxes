@@ -30,8 +30,8 @@
 
 - name: Run Packer build
   command:
-    cmd: packer build -only '*{{ box_name }}' -var='version={{ next_version }}' -var='cloud_token={{ vagrant_cloud_token | default(none) }}' -var='org={{ org | default(none) }}' box-config.pkr.hcl
-    creates: "output/output-{{ box_name }}"
-  async: 2100
-  poll: 15
+    cmd: packer build -var='version={{ next_version }}' -var='cloud_token={{ vagrant_cloud_token | default(none) }}' -var='org={{ org | default(none) }}' box-config.pkr.hcl
+    creates: "output/{{ box_name }}"
+  args:
+    chdir: box-files/{{ box_name }}
   tags: [build]

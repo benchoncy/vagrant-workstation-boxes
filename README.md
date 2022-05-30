@@ -61,13 +61,17 @@ ansible-playbook build-boxes.yml --extra-vars "next_version_type=patch"
 
 For testing and development the below command can be used to run packer directly while only outputting boxes to a local directory.
 
+Navigate to `box-files/<TARGET_BOX>/` and run:
+
 ```shell
-packer build -force -only='*<TARGET_BOX>' -except='vagrant-cloud' box-config.pkr.hcl
+packer build -force -except='vagrant-cloud' box-config.pkr.hcl
 ```
 
-Once packer is complete, you can navigate to `box-files/<TARGET_BOX>/` and run `vagrant up` to run the local box in vagrant.
+Once packer is complete, you can run `vagrant up` to run the local box in vagrant to verify the build.
 
-> **_NOTE:_**  Vagrant will boot the virtualbox vm with 4 cores and 8gb of RAM, if you do not have this available edit the Vagrantfile accordingly. 
+> **_NOTE:_**  Vagrant will boot the virtualbox vm with 2 cores and 8gb of RAM, if you do not have this available edit the Vagrantfile accordingly.
+
+> **_NOTE:_**  Between a new `packer build` and `vagrant up` be sure to clean out vagrant of the previous build, you can use `clean-vagrant.sh` for this.
 
 #### Packer variables
 
